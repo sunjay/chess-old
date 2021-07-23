@@ -1,7 +1,7 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+mod coord;
+mod piece;
+mod board;
+
+pub use piece::*;
+pub use coord::*;
+pub use board::*;
