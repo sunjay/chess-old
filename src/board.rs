@@ -1,24 +1,26 @@
-use crate::{Piece, Color, constants::*};
+use std::fmt;
+
+use crate::{Piece, Color, UnicodeBoard, constants::*};
 
 /// The size of the rows and columns of the chess board
 const SIZE: usize = 8;
 
 /// The rows of tiles on a chess board
 ///
-/// The index [0][0] coresponds to the A1 coordinate. It is assumed that white
+/// The index [0][0] coresponds to the a1 coordinate. It is assumed that white
 /// pawns will move `Direction::N`.
 pub type ChessTiles = [[Option<Piece>; SIZE]; SIZE];
 
-/// The default board setup with white at the bottom
+/// The default board setup with white pieces starting at A1
 pub const DEFAULT_BOARD: ChessTiles = [
-    [Some(B_R), Some(B_N), Some(B_B), Some(B_K), Some(B_Q), Some(B_B), Some(B_N), Some(B_R)],
-    [Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P)],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
+    [Some(W_R), Some(W_N), Some(W_B), Some(W_Q), Some(W_K), Some(W_B), Some(W_N), Some(W_R)],
     [Some(W_P), Some(W_P), Some(W_P), Some(W_P), Some(W_P), Some(W_P), Some(W_P), Some(W_P)],
-    [Some(W_R), Some(W_N), Some(W_B), Some(W_K), Some(W_Q), Some(W_B), Some(W_N), Some(W_R)],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P), Some(B_P)],
+    [Some(B_R), Some(B_N), Some(B_B), Some(B_Q), Some(B_K), Some(B_B), Some(B_N), Some(B_R)],
 ];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,5 +53,9 @@ impl ChessBoard {
     /// Transforms the board into a 2D array of pieces
     pub fn to_tiles(&self) -> ChessTiles {
         self.tiles
+    }
+
+    pub fn display(&self) -> impl fmt::Display + '_ {
+        UnicodeBoard::new(&self.tiles)
     }
 }

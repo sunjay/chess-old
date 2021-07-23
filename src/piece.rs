@@ -28,6 +28,20 @@ pub enum PieceType {
     Pawn,
 }
 
+impl fmt::Display for PieceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        use PieceType::*;
+        fmt::Display::fmt(&match *self {
+            King => '♚',
+            Queen => '♛',
+            Bishop => '♝',
+            Knight => '♞',
+            Rook => '♜',
+            Pawn => '♟',
+        }, f)
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Color {
     White,
