@@ -2,7 +2,7 @@ use std::fmt;
 
 use owo_colors::{OwoColorize, AnsiColors};
 
-use crate::{ChessTiles, Color as ChessColor};
+use crate::{ChessTiles, Color};
 
 const VBAR: char = '│';
 const HBAR: char = '─';
@@ -52,8 +52,8 @@ impl<'a> fmt::Display for UnicodeBoard<'a> {
             for tile in row.iter() {
                 match tile {
                     &Some(piece) => write!(f, " {} ", piece.type_().color(match piece.color() {
-                        ChessColor::White => AnsiColors::White,
-                        ChessColor::Black => AnsiColors::BrightMagenta,
+                        Color::White => AnsiColors::White,
+                        Color::Black => AnsiColors::BrightMagenta,
                     }))?,
                     None => write!(f, " {} ", ' ')?,
                 }

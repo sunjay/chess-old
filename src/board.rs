@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::{Piece, Color, UnicodeBoard, constants::*};
+use crate::{Piece, Color, UnicodeBoard, Coord, File, constants::*};
 
 /// The size of the rows and columns of the chess board
 const SIZE: usize = 8;
@@ -23,11 +23,44 @@ pub const DEFAULT_BOARD: ChessTiles = [
     [Some(B_R), Some(B_N), Some(B_B), Some(B_Q), Some(B_K), Some(B_B), Some(B_N), Some(B_R)],
 ];
 
+/// The piece that a pawn is promoted to upon reaching the other side of the board
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum PawnPromotion {
+    Queen,
+    Bishop,
+    Knight,
+    Rook,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum RookFile {
+    A,
+    H,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum Move {
+    /// Move the piece at `from` to the position `to`. The piece must be the color of the current
+    /// player and the move must be valid for the piece's type.
+    Move {from: Coord, to: Coord},
+
+    /// Promote the pawn on the second to last rank of the given file to the given piece
+    ///
+    /// The pawn must be on the 7th rank for white and the 2nd rank for black (depending on the
+    /// current turn).
+    Promote {pawn: File, promote_to: PawnPromotion},
+
+    /// Moves the king two tiles towards the given rook and the rook to the other side of the king.
+    Castle {rook: RookFile},
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChessBoard {
     tiles: ChessTiles,
     /// The player who will make the next move
     current_turn: Color,
+    /// If true, the current player's king is being attacked by at least one of the opponent's pieces
+    is_in_check: bool,
 }
 
 impl Default for ChessBoard {
@@ -42,6 +75,7 @@ impl ChessBoard {
         Self {
             tiles: DEFAULT_BOARD,
             current_turn: Color::White,
+            is_in_check: false,
         }
     }
 
@@ -57,5 +91,9 @@ impl ChessBoard {
 
     pub fn display(&self) -> impl fmt::Display + '_ {
         UnicodeBoard::new(&self.tiles)
+    }
+
+    pub fn make_move(&self, pmove: Move) {
+        todo!()
     }
 }
